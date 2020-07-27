@@ -14,7 +14,7 @@ I'm an Emacs devotee and I like to <a href="https://medium.com/@suvratapte/confi
 
 I'm very much interested in understanding how operating systems work. Here are my notes on the operating systems classic <a href="https://github.com/suvratapte/Maurice-Bach-Notes" target="_blank">The Design of the UNIX Opearting System</a> by Maurice J. Bach.
 
-Other than tech, I'm deeply interested in Indian Classical music and music in general. I have been playing tabla (Indian percussion instrument) for past 15 years. These days, I have started learning sitar.
+Other than tech, I'm deeply interested in Indian Classical music and music in general. I have been playing tabla (an Indian percussion instrument) for past 15 years. These days, I have started learning sitar.
 I have conducted workshops on music theory and I regularly teach tabla.
 
 I run a <a href="https://www.youtube.com/user/suvratapte1" target="_blank" target="_blank">YouTube channel</a> for curated technical tabla content.

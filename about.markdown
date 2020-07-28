@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-Thanks for visiting my website! My name is Suvrat. I am a software engineer at <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>.
+Thanks for visiting my website! I am Suvrat. I am a software engineer at <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>.
 
 I write distributed systems in Clojure. I like to dive deep into whatever I learn. I have spoken at Functional Conf 2019 about <a href="https://speakerdeck.com/suvratapte/debuggers-in-lispy-languages" target="_blank">Debuggers in Lisps</a>.
 

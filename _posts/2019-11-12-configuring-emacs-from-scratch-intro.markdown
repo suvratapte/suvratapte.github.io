@@ -200,3 +200,5 @@ Finally, let’s have a habit of writing comments for all the code that we have 
 Throughout this session, we have used `C-h <some key>` many times. `C-h` is the prefix key for getting help in Emacs. We have used it quite well here and you should continue following this pattern of using help to know more about Emacs! :)
 
 Knowing how to use the help system is crucial for mastering Emacs!
+
+### Next: <a href="/emacs/2019/12/02/configuring-emacs-from-scratch-packages.html">Installing and configuring new packages</a>

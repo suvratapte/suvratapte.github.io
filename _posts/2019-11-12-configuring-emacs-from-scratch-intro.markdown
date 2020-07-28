@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  Configuring Emacs from Scratch  -  Intro
+author: Suvrat Apte
 date:   2019-11-12 18:13:05 +0530
 categories: emacs
 ---

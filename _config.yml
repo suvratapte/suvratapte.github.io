@@ -31,6 +31,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: suvratapte
 github_username: suvratapte
+youtube_username: suvratapte1
+linkedin_username: suvrat-apte-27799592
 
 # Home page should show excerpts
 excerpt_separator: "<!---excerpt-break-->"

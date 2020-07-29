@@ -26,6 +26,8 @@ First, we will tell `package` to include Melpa in its list of package archives. 
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 {% endhighlight %}
 
+<!---excerpt-break-->
+
 The first line tells Emacs to load the feature/file called “package”. This will load functions and variables from `package`.
 The second line is some initialization that `package` does.
 The third line tells package to add melpa to `package-archives`. In Elisp, a pair can be constructed with `(<element 1> . <element 2>)`. The last argument `t` means that the pair must be appended to the list. Without `t`, the pair would be prepended to `package-archives`.

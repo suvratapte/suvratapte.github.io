@@ -19,6 +19,8 @@ Unfortunately, I have also realized that getting on-boarded on Emacs is not an e
 I’m going to use Emacs 26.1 on macOS. You can get it here for [macOS](https://emacsformacosx.com/), [Linux](http://ubuntuhandbook.org/index.php/2019/02/install-gnu-emacs-26-1-ubuntu-18-04-16-04-18-10/) or for [Windows](https://www.thecoderworld.com/ide/how-to-install-emacs-text-editor-on-windows-10/).
 *(The version doesn’t really matter. Most of the things written here will work for any Emacs version.)*
 
+<!---excerpt-break-->
+
 Once you start Emacs, you will see this:
 
 ![Startup screen](https://cdn-images-1.medium.com/max/3808/1*fv-ceMnQ6AHnhH0HWK3SRg.png)*Startup screen*

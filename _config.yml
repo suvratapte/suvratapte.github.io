@@ -30,7 +30,11 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: suvratapte
-github_username:  suvratapte
+github_username: suvratapte
+
+# Home page should show excerpts
+excerpt_separator: "<!---excerpt-break-->"
+show_excerpts: true
 
 # Build settings
 theme: minima

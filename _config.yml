@@ -41,6 +41,9 @@ show_excerpts: true
 twitter:
   username: suvratapte
 
+# Add headers for Google Analytics
+google_analytics: UA-174035059-1
+
 # Use only the title in the links (default is date directories + title + ext)
 permalink: /:title/
 

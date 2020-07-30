@@ -38,6 +38,9 @@ linkedin_username: suvrat-apte-27799592
 excerpt_separator: "<!---excerpt-break-->"
 show_excerpts: true
 
+twitter:
+  username: suvratapte
+
 # Use only the title in the links (default is date directories + title + ext)
 permalink: /:title/
 

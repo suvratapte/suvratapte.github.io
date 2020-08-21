@@ -6,7 +6,7 @@ date:   2020-08-20 23:01:40 +0530
 categories: clojure, cider-nrepl, nrepl
 ---
 
-In this post, I will try to cover what <a href="https://nrepl.org/"
+In this post, I have tried to cover what <a href="https://nrepl.org/"
 target="_blank">nREPL</a> is, what _nREPL Middleware_ are and why we need them. We will
 also look at the middleware provided by <a href="https://github.com/clojure-emacs/cider-nrepl"
 target="_blank">`cider-nrepl`</a> and in the end, we will write our own custom middleware.
@@ -59,8 +59,7 @@ with this name:
 `*nrepl-messages <projectname>:<host>:<port>*`
 
 This buffer lists all the messages sent by the client and the replies sent by the
-server. Messages starting with `-->` are requests from client. And those starting with
-`<--` are replies from server.  <br>When we executed `(println "Hello, world!")`, the
+server.  <br>When we executed `(println "Hello, world!")`, the
 client sent this message:
 
 {% highlight clojure %}
@@ -82,6 +81,8 @@ client sent this message:
 )
 {% endhighlight %}
 
+> Messages starting with `-->` are requests from client. And those starting with
+> `<--` are replies from server. <br>
 > The messages buffer will contain some other messages as well. But we will focus on the
 > messages that I've mentioned here.
 
@@ -93,7 +94,7 @@ other fields that that particular `op` depends on.
 
 In the above message, the `op` is `eval`. From `eval`, the server understands that it has
 to evaluate some code. It expects the client to send the code to be evaluated in `code`
-field. You can see that the `code` field contains the code which we had run: `"(println \"Hello, world!\")`.
+field. You can see that the `code` field contains the code which we had run: `"(println \"Hello, world!\")"`.
 
 The `session` field represents the ID of the current session. Every client has a separate
 session with the server so that the server can identify multiple clients
@@ -200,10 +201,9 @@ comes from and the type of completion candidate (`var` or `function`). Now if yo
 screenshot above, you can see that `print-method` has a `<v>` at the end - signifying that
 it is a `var`. This is based on the `type` information sent by the server.
 
-These two messages give us a fair idea about how the operation must be
-implemented. However, if you do not know the architecture of middleware, there is one
-small point which is a bit counter intuitive. If I were to guess how the implementation of
-nREPL Middleware must be, I would guess it to be something like the following:
+These two messages give us a fair idea about how the operation must be implemented. If I
+were to guess how the implementation of nREPL Middleware must be, I would guess it to be
+something like the following:
 
 <p align="center">
 <img src="/resources/nREPL--probable-architecture.png" style="height: 100%; width: 100%">
@@ -214,9 +214,10 @@ nREPL Middleware must be, I would guess it to be something like the following:
 
 Depending on the operation, requests would be routed to respective handlers. And to add a
 new handler, you would register the operation and the handler function with nREPL. But
-that is not the case. It is similar to how <a
+that is not the case. There is one small point which is a bit counter intuitive. The
+architecture is similar to how <a
 href="https://github.com/ring-clojure/ring/wiki/Concepts" target="_blank">Ring
-middleware</a> works. The architecture looks like this:
+middleware</a> works. It looks like this:
 
 <p align="center">
 <img src="/resources/nREPL--nrepl-middleware-architecture.png" style="height: 70%; width: 70%;">
@@ -362,7 +363,7 @@ In this post, we saw:
 * Why was there a need to have REPLs other than Clojure's default REPL. 
 * How nREPL provides extensibility with support for custom middleware. 
 * How to look at client-server messaging with Emacs + `cider`.
-* Architecture of nREPL middleware.
+* Architecture of nREPL Middleware.
 * How to add a custom middleware.
 
 Now whenever you feel like some functionality is missing from your Clojure development

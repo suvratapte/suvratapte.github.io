@@ -4,6 +4,7 @@ title:  nREPL Middleware
 author: Suvrat Apte
 date:   2020-08-20 23:01:40 +0530
 categories: clojure, cider-nrepl, nrepl
+comments: true
 ---
 
 In this post, I have tried to cover what <a href="https://nrepl.org/"

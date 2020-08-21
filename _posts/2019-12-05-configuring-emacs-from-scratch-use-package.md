@@ -10,7 +10,7 @@ comments: true
 *(You can read this post on <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-use-package-c30382297877" target="_blank">Medium</a>.)*
 
 This is the third part of a series on “Configuring Emacs from Scratch”.
-You can read the first part <a href="/emacs/2019/11/12/configuring-emacs-from-scratch-intro.html" target="_blank">here</a> and the second part <a href="/emacs/2019/12/02/configuring-emacs-from-scratch-packages.html" target="_blank">here</a>.
+You can read the first part <a href="/configuring-emacs-from-scratch-intro/" target="_blank">here</a> and the second part <a href="/configuring-emacs-from-scratch-packages/" target="_blank">here</a>.
 
 In the last two parts, we customized some defaults of Emacs. We also installed two packages and customized their default behavior. In this part, we will organize our configuration and make it portable using ***use-package***.
 

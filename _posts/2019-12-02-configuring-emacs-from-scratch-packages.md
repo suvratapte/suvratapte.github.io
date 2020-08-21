@@ -10,7 +10,7 @@ comments: true
 *(You can read this post on <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-packages-220bbc5e55b7" target="_blank">Medium</a>.)*
 
 This is the second part of a series on “Configuring Emacs from Scratch”.
-You can read the first part <a href="/emacs/2019/11/12/configuring-emacs-from-scratch-intro.html" target="_blank">here</a>.
+You can read the first part <a href="/configuring-emacs-from-scratch-intro/" target="_blank">here</a>.
 
 In the last part, we customized some defaults of Emacs. But Emacs is not at all limited to customizing the defaults. Emacs has a **huge** eco-system of external packages that you can install. The default package manager for Emacs is called “package”. Package can fetch packages from multiple sources. Elpa (Emacs Lisp Package Archive) is the source that it uses by default. But users usually add [Melpa](https://melpa.org/#/) and [Marmalade](https://marmalade-repo.org/) to their list of package sources.
 

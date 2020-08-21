@@ -4,6 +4,7 @@ title:  Configuring Emacs from Scratch  -  Packages
 author: Suvrat Apte
 date:   2019-12-02 16:11:08 +0530
 categories: emacs
+comments: true
 ---
 
 *(You can read this post on <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-packages-220bbc5e55b7" target="_blank">Medium</a>.)*

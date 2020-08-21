@@ -4,6 +4,7 @@ title:  Configuring Emacs from Scratch  -  Intro
 author: Suvrat Apte
 date:   2019-11-12 18:13:05 +0530
 categories: emacs
+comments: true
 ---
 
 *(You can read this post on <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-intro-3157bed9d040" target="_blank">Medium</a>.)*

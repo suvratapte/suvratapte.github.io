@@ -4,6 +4,7 @@ title:  Configuring Emacs from Scratch  -  use-package
 author: Suvrat Apte
 date:   2019-12-05 22:05:37 +0530
 categories: emacs
+comments: true
 ---
 
 *(You can read this post on <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-use-package-c30382297877" target="_blank">Medium</a>.)*

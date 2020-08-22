@@ -268,3 +268,5 @@ As usual, do not forget to write good comments. Your `init.el` will look somethi
 In this part, we installed two packages and changed their default configuration. We saw how to discover configuration options by browsing variables or by going through the *Customize menu.* Customize menu is a great tool for discovering different configurations (but it is recommended to move the changed configurations back to your own Elisp code).
 
 You would have also realized that the customization options in Emacs are far more granular than any of the IDEs. We can customize even the tiniest details and this gives us the power to make Emacs behave the way we want! :)
+
+### Next: <a href="/configuring-emacs-from-scratch-use-package/">Making your setup organized and portable</a>

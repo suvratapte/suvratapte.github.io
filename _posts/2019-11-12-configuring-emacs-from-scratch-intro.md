@@ -204,4 +204,4 @@ Throughout this session, we have used `C-h <some key>` many times. `C-h` is the 
 
 Knowing how to use the help system is crucial for mastering Emacs!
 
-### Next: <a href="/emacs/2019/12/02/configuring-emacs-from-scratch-packages.html">Installing and configuring new packages</a>
+### Next: <a href="/configuring-emacs-from-scratch-packages/">Installing and configuring new packages</a>

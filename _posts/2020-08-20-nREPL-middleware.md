@@ -98,11 +98,11 @@ to evaluate some code. It expects the client to send the code to be evaluated in
 field. You can see that the `code` field contains the code which we had run: `"(println \"Hello, world!\")"`.
 
 The `session` field represents the ID of the current session. Every client has a separate
-session with the server so that the server can identify multiple clients
-separately. Another important field in all the messages is the `id` field. The server will
-use the same `id` in its replies to client requests. So to look at the replies from
-server, let's use the `id` field (at your end, `id` will most probably be a different
-number). Here are the replies from the server:
+session ID with the server so that the server can identify multiple clients
+separately. The `id` field is the ID of the request. Every request has a separate ID. The
+server uses the same `id` in its replies so that clients can map requests and replies. So
+to look at the replies from server, let's use the `id` field (at your end, `id` will most
+probably be a different number). Here are the replies from the server:
 
 {% highlight clojure %}
 (<--

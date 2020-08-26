@@ -214,8 +214,9 @@ something like the following:
 </p>
 
 Depending on the operation, requests would be routed to respective handlers. And to add a
-new handler, you would register the operation and the handler function with nREPL. But
-that is not the case. There is one small point which is a bit counter intuitive. The
+new handler, you would register the operation and the handler function with nREPL.
+
+But that is not the case. There is one small point which is a bit counter intuitive. The
 architecture is similar to how <a
 href="https://github.com/ring-clojure/ring/wiki/Concepts" target="_blank">Ring
 middleware</a> works. It looks like this:

@@ -106,7 +106,7 @@ Now that we have completed the interactive Emacs tutorial, we don’t want Emacs
 
 So now we will go ahead and create this file.
 
-* Press `C-x f` and write `.emacs.d/init.el` (`~/` will already be there) and press `<RET>`. A new buffer will open up.
+* Press `C-x C-f` and write `.emacs.d/init.el` (`~/` will already be there) and press `<RET>`. A new buffer will open up.
 
 * Write these contents in that buffer: (setq inhibit-startup-message t) and save (`C-x C-s`).
 

@@ -92,7 +92,7 @@ cache keys.
 
 {% endhighlight %}
 
-Let's go through the code above. 
+Let's go through the code above.
 
 `names` is just a collection of names.
 
@@ -143,7 +143,7 @@ We will get the following:
 {% endhighlight %}
 
 If we compare the distribution of keys for 4 nodes vs 5 nodes, we can see that
-literally *all* the keys have different nodes now. 
+literally *all* the keys have different nodes now.
 
 The same will happen if a node goes down. Let's simulate this by running:
 
@@ -159,7 +159,7 @@ This produces:
  "node-2" ["Alice" "Bob" "Kate" "Zack"]}
 {% endhighlight %}
 
-In this case as well, 10 out of 12 keys now have a different node. 
+In this case as well, 10 out of 12 keys now have a different node.
 
 Both these situations create a really bad situation for our databases. Our data
 is going to be residing on 4 nodes initially. Once we add or remove nodes,
@@ -175,15 +175,171 @@ select nodes (`get-node`) for data includes the _number of nodes_ as a
 parameter. So when our _number of nodes_ changes, clearly the output of
 `get-node` is most likely to change.
 
-We need to find a strategy will not directly depend on the _number of nodes_ that we have.
+We need to find a strategy which will not directly depend on the _number of
+nodes_ that we have.
 
 ## Consistent Hashing
 
+TODO: Ref paper
 
+Consistent hashing is a simple method of hashing which does not depend on the
+number of nodes we have. In consistent hashing, we imagine our nodes to be
+placed on a ring. The ring is made up of the range of our hash function. For
+example, if our hash function produced hashes over the entire range of integers,
+then the ring would go from the minimum integer to the maximum integer.
 
+TODO: Diagram of the ring
 
+We will generate hashes for nodes using some property of nodes, say the IP
+addresses. These will be the locations of our nodes on the ring.
 
+TODO: Diagram of the ring with nodes (4 nodes)
 
+To insert or retrieve data, we will hash the caching key and use the node which
+is closest to the caching key hash in the clockwise (you can choose
+anti-clockwise as well) direction.
 
+TODO: Diagram of the cache key on the ring.
 
+What benefit has this given us?
 
+Well, so far it does not look like this is useful. In fact, we are doing more
+work to find out which data goes to which node. We will now consider the 2 cases
+that we discussed for mod n hashing.
+
+Let's say we add a 5th node to our ring.
+
+TODO: Diagram of the ring with the 5th node.
+
+Since the 5th node got placed between the 2nd (TODO: superscript) and 3rd (TODO:
+superscript) node, think about which keys will get re-allocated. Only the keys
+between 2nd (TODO: superscript) and 5th (TODO: superscript) node will be
+re-allocated to the 5th node. All the keys on the rest of the ring will remain
+where they were. This is huge benefit for our cache nodes as well as our
+databases.
+
+## Implementation in Clojure
+
+We will write a simple and clean API for consistent hashing. This will include
+functions to manage the ring: `create-ring`, `add-node`, `remove-node`. And like
+before, we will have a `get-node` function which will tell us which node is to
+be used.
+
+{% highlight clojure %}
+
+(defn create-ring
+  "Creates a ring for `nodes`.
+
+  `nodes` should be a coll of property of nodes which should be used
+  for placing the nodes on the ring.
+  Returns a ring data structure. It is a map which looks like this:
+
+  {:node-hashes <a list containing hashes of `nodes` (order is preserved) >
+
+   :hash->node <a map which is a look up table which gives node descriptor
+                given a hash to a hash> }
+
+  The return value of this function should be preserved by the caller as it is
+  required as input to other functions in this API.
+  "
+  [nodes]
+  (let [nodes (set nodes)
+        node-hashes (->> nodes
+                         (map hash)
+                         sort)
+        hash->node (reduce (fn [acc node]
+                             (assoc acc
+                                    (hash node)
+                                    node))
+                           {}
+                           nodes)]
+    {:node-hashes node-hashes
+     :hash->node hash->node}))
+
+{% endhighlight %}
+
+We are taking the `set` of nodes to make sure there are no duplicate
+entries. Then we get the hash values for all the nodes and sort them in
+ascending order. This sorted list will be used to find the closest node in the
+ring. We also create a lookup table `hash->node` which gives us the node
+corresponding to a given hash. Finally, we return both of these so that they can
+be passed to other functions in our API.
+
+Let's see how `add-node` and `remove-node` work.
+
+{% highlight clojure %}
+
+(defn add-node
+  "Adds `node` to existing `ring-state`.
+
+  `ring-state` is expected to be a ring data structure (see doc string of
+  `create-ring`.)
+
+  `node` is expected to be a node descriptor (see doc string of `create-ring`).
+
+  Returns a ring data structure (see doc string of `create-ring`).
+  "
+  [ring-state node]
+  (let [current-nodes (-> ring-state :hash->node vals)]
+    (-> current-nodes
+        (conj node)
+        create-ring)))
+
+(defn remove-node
+  "Removes `node` from existing `ring-state`.
+
+  `ring-state` is expected to be a ring data structure (see doc string of
+  `create-ring`.)
+
+  `node` is expected to be a node descriptor (see doc string of `create-ring`).
+
+  Returns a ring data structure (see doc string of `create-ring`).
+  "
+  [ring-state node]
+  (let [current-nodes (-> ring-state :hash->node vals)]
+    (->> current-nodes
+         (remove #(= % node))
+         create-ring)))
+
+{% endhighlight %}
+
+As you can see, these are very simple functions which just get `current-nodes`
+from `ring-state` and then add or remove a node and create the ring again. This
+works because our hash function is repeatable. So creating the ring again
+generates the same hash values for existing nodes.
+
+Let's look at the last function in our API, `get-node`.
+
+{% highlight clojure %}
+
+(defn get-node
+  "Returns node to be used for cache-key `k`."
+  [ring-state k]
+  (let [node-hashes (:node-hashes ring-state)
+        key-hash (hash k)
+        closest-hash (or (->> node-hashes
+                              (drop-while #(< % key-hash))
+                              first)
+                         (first node-hashes))]
+    (get (:hash->node ring-state) closest-hash)))
+
+{% endhighlight %}
+
+The main logic in this function is to find the closest node to the cache-key, in
+clockwise direction.
+
+{% highlight clojure %}
+
+(or (->> node-hashes
+         (drop-while #(< % key-hash))
+         first)
+    (first node-hashes))
+
+{% endhighlight %}
+
+`node-hashes` is the sorted list of hashes of our nodes. We are dropping the
+nodes which have hashes lesser than the hash of the cache-key. We will stop
+dropping once we find a value greater than `key-hash`. This value will be the
+hash of the closest node in clockwise direction. If `key-hash` is greater then
+all the values in `node-hashes`, we wrap around and select `(first
+node-hashes)`.

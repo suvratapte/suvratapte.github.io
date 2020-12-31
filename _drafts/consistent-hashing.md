@@ -8,7 +8,7 @@ comments: true
 ---
 
 In this post, I have tried explaining what *Consistent Hashing* is and why it is
-needed.
+needed and its implementation in Clojure.
 
 ## Caching
 
@@ -19,18 +19,19 @@ paths, it will be checked if data is available on the cache node, if not, you
 would go to the database and populate the data on your cache node. On write
 paths, you would first update the database and then your cache.
 
-But as your application usage and data grows, your cache node is also going to
-get overwhelmed and soon enough, you will need multiple cache nodes. When you
-have multiple nodes, you will need to decide how you are going to divide data
-between these nodes.
+But as your application usage grows, your cache node is also going to get
+overwhelmed and soon enough, you will need multiple cache nodes. When you have
+multiple nodes, you will need to decide how you are going to divide data between
+those nodes.
 
 ## Distributed Caching
 
-One very simple strategy to divide data between cache nodes is to take hash
-(integer) of the cache key and then take mod by the number of cache nodes.
+One very simple strategy to divide data between cache nodes is to take an
+integer hash of the cache key and then take the mod by the number of cache
+nodes.
 
-For example, if hash of the cache key came out to be 86696499 and if we have 4
-servers, then `(86696499 mod 4) = 3`. So the data should be in the node with
+For example, if the hash of the cache key came out to be 86696499 and if we have
+4 servers, then `(86696499 mod 4) = 3`; so the data should be in the node with
 index 3 (0 based indexes).
 
 This is very simple to implement. For simplicity, we will use names of users as
@@ -71,7 +72,7 @@ Let's go through the code above.
 `names` is just a collection of names.
 
 `get-node` tells us which object should go on which node. This was the logic
-that we discussed previously. We are first taking a hash and then taking a `mod n`
+that we discussed previously. We are first taking a hash and then taking `mod n`
 of that hash.
 
 `get-distribution` just runs `get-node` on `names` and returns a map which has
@@ -135,26 +136,24 @@ This produces:
 
 In this case as well, 10 out of 12 keys now have a different node.
 
-Both these situations create a really bad situation for our databases. Our data
-is going to be residing on 4 nodes initially. Once we add or remove nodes,
-almost all of our cache keys are going to have different nodes. This is going to
-result into a flurry of cache misses and all the missed requests will go to our
-databases, creating a hotspot.
+Both of these cases create a really bad situation for our databases. Our data is
+going to be residing on 4 nodes initially. Once we add or remove nodes, almost
+all of the keys are going to get relocated. This is going to result into a
+flurry of cache misses and all the missed requests will go to our databases,
+creating a hotspot.
 
 This is clearly undesirable and in extreme situations, this could even take our
 entire system down.
 
 Let's understand why this is happening. We need to remember that our logic to
-select nodes (`get-node`) for data includes the _number of nodes_ as a
-parameter. So when our _number of nodes_ changes, clearly the output of
-`get-node` is most likely to change.
+select nodes (`get-node`) for data includes _number of nodes_ as a parameter. So
+when our _number of nodes_ changes, clearly the output of `get-node` is most
+likely to change.
 
 We need to find a strategy which will not directly depend on the _number of
 nodes_ that we have.
 
 ## Consistent Hashing
-
-TODO: Ref paper
 
 Consistent hashing is a simple method of hashing which does not depend on the
 number of nodes we have. In consistent hashing, we imagine our nodes to be
@@ -162,19 +161,19 @@ placed on a ring. The ring is made up of the range of our hash function. For
 example, if our hash function produced hashes over the entire range of integers,
 then the ring would go from the minimum integer to the maximum integer.
 
-We will generate hashes for nodes using some property of nodes, say the IP
-addresses. These will be the locations of our nodes on the ring.
+We will generate hashes for nodes using some unique property of nodes, say IP
+addresses. These hashes will be the locations of our nodes on the ring.
 
 <p align="center">
 <img src="/resources/consistent-hashing-ring.png" style="height: 55%; width: 55%;">
 </p>
 
 To insert or retrieve data, we will hash the caching key and use the node which
-is closest to the caching key hash in the clockwise (you can choose
-anti-clockwise as well) direction.
+is closest to the caching key hash in the clockwise direction. (Clockwise is
+just a convention we are using for this post. Anti-clockwise will also work.)
 
 <p align="center">
-<img src="/resources/consistent-hashing-ring-key-hash.png" style="object-position: 70px 0; height: 75%; width: 75%;">
+<img src="/resources/consistent-hashing-ring-key-hash.png" style="margin-left:130px; height: 75%; width: 75%;">
 </p>
 
 What benefit has this given us?
@@ -185,7 +184,7 @@ that we discussed for mod n hashing.
 
 Let's say we add a 5<sup>th</sup> node to our ring.
 
-Since the 5<sup>th</sup> node got placed between the 1<sup>st</sup> and the
+If the 5<sup>th</sup> node got placed between the 1<sup>st</sup> and the
 2<sup>nd</sup> node, think about which keys will get relocated. Only the keys
 between 1<sup>st</sup> and 5<sup>th</sup> node will be relocated to the
 5<sup>th</sup> node. All the keys on the rest of the ring will remain where they
@@ -199,20 +198,22 @@ Similarly, if one of our nodes, say the 4<sup>th</sup> node, goes down; then
 only the keys between the 3<sup>rd</sup> and 4<sup>th</sup> will get relocated.
 
 <p align="center">
-<img src="/resources/consistent-hashing-node-removed.png" style="object-position: -10px; height: 65%; width: 65%;">
+<img src="/resources/consistent-hashing-node-removed.png" style="margin-right: 35px; height: 65%; width: 65%;">
 </p>
 
 When nodes are added or removed, only `count(keys) / count(nodes)` number of
 keys will be relocated. This will reduce the number of cache misses by a huge
 amount and save our databases from hotspots!
+<br/>_(There is a small caveat here which is discussed later.)_
 
 
 ## Implementation in Clojure
 
-We will write a simple and clean API for consistent hashing. This will include
-functions to manage the ring: `create-ring`, `add-node`, `remove-node`. And like
-before, we will have a `get-node` function which will tell us which node is to
-be used.
+We will write a simple API for consistent hashing. This will include functions
+to manage the ring: `create-ring`, `add-node`, `remove-node`. And like before,
+we will have a `get-node` function.
+
+Let's look at `create-ring` first.
 
 {% highlight clojure %}
 
@@ -293,9 +294,9 @@ Let's see how `add-node` and `remove-node` work.
 {% endhighlight %}
 
 As you can see, these are very simple functions which just get `current-nodes`
-from `ring-state` and then add or remove a node and create the ring again. This
-works because our hash function is repeatable. So creating the ring again
-generates the same hash values for existing nodes.
+from `ring-state` and then add or remove a node and call `create-ring`
+again. This works because our hash function is repeatable. So creating the ring
+again generates the same hash values for existing nodes.
 
 Let's look at the last function in our API, `get-node`.
 
@@ -390,7 +391,7 @@ With a node added:
 It is interesting to see that nothing has changed here! This is the best
 case. It will happen rarely in production.
 
-With "node-3" removed:
+With `node-3` removed:
 
 {% highlight clojure %}
 
@@ -398,10 +399,12 @@ With "node-3" removed:
 
 {"node-0" ["Carry" "Heidi" "Zack"],
  "node-1" ["Alice" "Wendy"],
- "node-2" ["Daisy"],
- "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+ "node-2" ["Bob" "Daisy" "George" "Kate" "Mark" "Steve" "Tony"]}
 
 {% endhighlight %}
+
+We can see that `node-3` keys are now with `node-2`. Keys with `node-0` and
+`node-1` have not changed at all.
 
 ## Caveats
 
@@ -416,8 +419,8 @@ like this:
 In the above situation, most of the keys will go to `Node 1`.
 
 The solution is simple. Instead of having just one hash per node, we could have
-multiple hashes which map to the save node. This will ensure more randomness and
-better distribution of keys. It will look like this:
+multiple hashes which map to the same node. This will ensure more randomness and
+a better distribution of keys. It will look like this:
 
 <p align="center">
 <img src="/resources/consistent-hashing-caveat-solution.png" style="height: 68%; width: 68%;">
@@ -425,7 +428,13 @@ better distribution of keys. It will look like this:
 
 ## Conclusion
 
-Consistent hashing is a simple and great caching strategy to make sure your
-databases are protected from hotspot in a distributed environment. Consistent
-hashing is able to achieve this by getting rid of `number of nodes` as a
-parameter to hashing.
+* Consistent hashing is a simple and great caching strategy to make sure your
+databases are protected from hotspot in a distributed environment.
+
+* Consistent hashing is able to achieve this by getting rid of `number of nodes`
+as a parameter to hashing.
+
+* When nodes are added or removed, only `count(keys) / count(nodes)` number of
+keys will be relocated.
+
+* Many in-memory datastores today use consistent hashing.

@@ -175,7 +175,7 @@ is closest to the caching key hash in the clockwise direction. (Clockwise is
 just a convention we are using for this post. Anti-clockwise will also work.)
 
 <p align="center">
-<img src="/resources/consistent-hashing-ring-key-hash.png" style="margin-left:130px; height: 75%; width: 75%;">
+<img src="/resources/consistent-hashing-ring-key-hash.png" style="margin-left:19%; height: 75%; width: 75%;">
 </p>
 
 What benefit has this given us?
@@ -200,7 +200,7 @@ Similarly, if one of our nodes, say the 4<sup>th</sup> node, goes down; then
 only the keys between the 3<sup>rd</sup> and 4<sup>th</sup> will get relocated.
 
 <p align="center">
-<img src="/resources/consistent-hashing-node-removed.png" style="margin-right: 35px; height: 65%; width: 65%;">
+<img src="/resources/consistent-hashing-node-removed.png" style="margin-right: 5%; height: 65%; width: 65%;">
 </p>
 
 When nodes are added or removed, only `count(keys) / count(nodes)` number of

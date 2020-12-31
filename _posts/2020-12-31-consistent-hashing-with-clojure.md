@@ -2,7 +2,7 @@
 layout: post
 title:  Consistent Hashing with Clojure
 author: Suvrat Apte
-date:   2020-12-28 14:39:40 +0530
+date:   2020-12-31 15:29:40 +0530
 categories: consistent-hashing, distributed-caches, clojure
 comments: true
 ---
@@ -29,6 +29,8 @@ those nodes.
 One very simple strategy to divide data between cache nodes is to take an
 integer hash of the cache key and then take the mod by the number of cache
 nodes.
+
+<!---excerpt-break-->
 
 For example, if the hash of the cache key came out to be 86696499 and if we have
 4 servers, then `(86696499 mod 4) = 3`; so the data should be in the node with

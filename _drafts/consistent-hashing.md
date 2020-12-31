@@ -188,18 +188,20 @@ placed on a ring. The ring is made up of the range of our hash function. For
 example, if our hash function produced hashes over the entire range of integers,
 then the ring would go from the minimum integer to the maximum integer.
 
-TODO: Diagram of the ring
-
 We will generate hashes for nodes using some property of nodes, say the IP
 addresses. These will be the locations of our nodes on the ring.
 
-TODO: Diagram of the ring with nodes (4 nodes)
+<p align="center">
+<img src="/resources/consistent-hashing-ring.png" style="height: 55%; width: 55%;">
+</p>
 
 To insert or retrieve data, we will hash the caching key and use the node which
 is closest to the caching key hash in the clockwise (you can choose
 anti-clockwise as well) direction.
 
-TODO: Diagram of the cache key on the ring.
+<p align="center">
+<img src="/resources/consistent-hashing-ring-key-hash.png" style="object-position: 70px 0; height: 75%; width: 75%;">
+</p>
 
 What benefit has this given us?
 
@@ -207,16 +209,27 @@ Well, so far it does not look like this is useful. In fact, we are doing more
 work to find out which data goes to which node. We will now consider the 2 cases
 that we discussed for mod n hashing.
 
-Let's say we add a 5th node to our ring.
+Let's say we add a 5<sup>th</sup> node to our ring.
 
-TODO: Diagram of the ring with the 5th node.
+Since the 5<sup>th</sup> node got placed between the 1<sup>st</sup> and the 2<sup>nd</sup>
+node, think about which keys will get re-allocated. Only the keys between
+1<sup>st</sup> and 5<sup>th</sup> node will be
+re-allocated to the 5<sup>th</sup> node. All the keys on the rest of the ring will remain
+where they were.
 
-Since the 5th node got placed between the 2nd (TODO: superscript) and 3rd (TODO:
-superscript) node, think about which keys will get re-allocated. Only the keys
-between 2nd (TODO: superscript) and 5th (TODO: superscript) node will be
-re-allocated to the 5th node. All the keys on the rest of the ring will remain
-where they were. This is huge benefit for our cache nodes as well as our
-databases.
+<p align="center">
+<img src="/resources/consistent-hashing-node-added.png" style="height: 60%; width: 60%;">
+</p>
+
+Similarly, if one of our nodes, say the 4<sup>th</sup> node, goes down; then
+only the keys between the 3<sup>rd</sup> and 4<sup>th</sup> will get rebalanced.
+
+<p align="center">
+<img src="/resources/consistent-hashing-node-removed.png" style="object-position: -10px; height: 65%; width: 65%;">
+</p>
+
+This will reduce the number of cacahe misses by a huge amount and save our
+databases from hotspots!
 
 ## Implementation in Clojure
 
@@ -343,3 +356,7 @@ dropping once we find a value greater than `key-hash`. This value will be the
 hash of the closest node in clockwise direction. If `key-hash` is greater then
 all the values in `node-hashes`, we wrap around and select `(first
 node-hashes)`.
+
+Now our API for consistent hashing is complete and ready for use!
+
+Let's use it for the same example scenarios that we used for mod n hashing.

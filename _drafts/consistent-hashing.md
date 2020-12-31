@@ -13,37 +13,11 @@ needed.
 ## Caching
 
 Almost all applications today use some kind of caching. Caches are required to
-save your databases from having to serve huge amount of requests. Caches are
-usually used as follows:
-
-**Insert path**: Information of user X is to be inserted in a database.
-
-```
-1. Update your database with user X data.
-2. Populate your cache with the same data with cache key (say, user ID).
-   (Optionally with some TTL)
-```
-
-**Retrieve path**: Information of user X is to be retrieved from a database.
-
-```
-1. Check if cache has data for user X. This will be checked with the
-   cache key (user ID).
-2a. If found, serve the data.
-2b. If not found, fetch it from the database, populate the cache and
-    serve the data.
-```
-
-**Update path**: Information of user X is to be updated in a database.
-(Same as the insert path.)
-
-**Delete path**: Information of user X is to be deleted from a database.
-
-```
-1. Invalidate cache entry for user X. This will be done with the cache
-   key (user ID).
-2. Delete data from the databse.
-```
+save your databases from having to serve huge amount of requests. Initially,
+your application would have one cache node sitting over your database. On read
+paths, it will be checked if data is available on the cache node, if not, you
+would go to the database and populate the data on your cache node. On write
+paths, you would first update the database and then your cache.
 
 But as your application usage and data grows, your cache node is also going to
 get overwhelmed and soon enough, you will need multiple cache nodes. When you
@@ -211,25 +185,27 @@ that we discussed for mod n hashing.
 
 Let's say we add a 5<sup>th</sup> node to our ring.
 
-Since the 5<sup>th</sup> node got placed between the 1<sup>st</sup> and the 2<sup>nd</sup>
-node, think about which keys will get re-allocated. Only the keys between
-1<sup>st</sup> and 5<sup>th</sup> node will be
-re-allocated to the 5<sup>th</sup> node. All the keys on the rest of the ring will remain
-where they were.
+Since the 5<sup>th</sup> node got placed between the 1<sup>st</sup> and the
+2<sup>nd</sup> node, think about which keys will get relocated. Only the keys
+between 1<sup>st</sup> and 5<sup>th</sup> node will be relocated to the
+5<sup>th</sup> node. All the keys on the rest of the ring will remain where they
+were.
 
 <p align="center">
 <img src="/resources/consistent-hashing-node-added.png" style="height: 60%; width: 60%;">
 </p>
 
 Similarly, if one of our nodes, say the 4<sup>th</sup> node, goes down; then
-only the keys between the 3<sup>rd</sup> and 4<sup>th</sup> will get rebalanced.
+only the keys between the 3<sup>rd</sup> and 4<sup>th</sup> will get relocated.
 
 <p align="center">
 <img src="/resources/consistent-hashing-node-removed.png" style="object-position: -10px; height: 65%; width: 65%;">
 </p>
 
-This will reduce the number of cacahe misses by a huge amount and save our
-databases from hotspots!
+When nodes are added or removed, only `count(keys) / count(nodes)` number of
+keys will be relocated. This will reduce the number of cache misses by a huge
+amount and save our databases from hotspots!
+
 
 ## Implementation in Clojure
 
@@ -360,3 +336,96 @@ node-hashes)`.
 Now our API for consistent hashing is complete and ready for use!
 
 Let's use it for the same example scenarios that we used for mod n hashing.
+
+{% highlight clojure %}
+
+(require '[clojure.pprint :as pp])
+
+(def names ["Alice" "Bob" "Carry" "Daisy" "George" "Heidi"
+            "Kate" "Mark" "Steve" "Tony" "Wendy" "Zack"])
+
+(def nodes ["node-0" "node-1" "node-2" "node-3"])
+
+(defn get-distribution
+  [nodes objects]
+  (let [ring-state (create-ring nodes)]
+    (reduce (fn [acc object]
+              (let [node (get-node ring-state object)]
+                (update acc
+                        node
+                        (fnil conj [])
+                        object)))
+            {}
+            objects)))
+
+;; For printing maps in sorted order of keys
+(->> names (get-distribution nodes) (into (sorted-map)) pp/pprint)
+
+{% endhighlight %}
+
+Result with 4 nodes:
+
+{% highlight clojure %}
+
+{"node-0" ["Carry" "Heidi" "Zack"],
+ "node-1" ["Alice" "Wendy"],
+ "node-2" ["Daisy"],
+ "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+
+{% endhighlight %}
+
+With a node added:
+
+{% highlight clojure %}
+
+(->> names (get-distribution (nodes "node-4")) (into (sorted-map)) pp/pprint)
+
+{"node-0" ["Carry" "Heidi" "Zack"],
+ "node-1" ["Alice" "Wendy"],
+ "node-2" ["Daisy"],
+ "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+
+{% endhighlight %}
+
+It is interesting to see that nothing has changed here! This is the best
+case. It will happen rarely in production.
+
+With "node-3" removed:
+
+{% highlight clojure %}
+
+(->> names (get-distribution (drop-last nodes)) (into (sorted-map)) pp/pprint)
+
+{"node-0" ["Carry" "Heidi" "Zack"],
+ "node-1" ["Alice" "Wendy"],
+ "node-2" ["Daisy"],
+ "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+
+{% endhighlight %}
+
+## Caveats
+
+Our implementation above is not something that can be used in production. The
+problem is that when we have only a few nodes, we could land up in a situation
+like this:
+
+<p align="center">
+<img src="/resources/consistent-hashing-caveat.png" style="height: 55%; width: 55%;">
+</p>
+
+In the above situation, most of the keys will go to `Node 1`.
+
+The solution is simple. Instead of having just one hash per node, we could have
+multiple hashes which map to the save node. This will ensure more randomness and
+better distribution of keys. It will look like this:
+
+<p align="center">
+<img src="/resources/consistent-hashing-caveat-solution.png" style="height: 68%; width: 68%;">
+</p>
+
+## Conclusion
+
+Consistent hashing is a simple and great caching strategy to make sure your
+databases are protected from hotspot in a distributed environment. Consistent
+hashing is able to achieve this by getting rid of `number of nodes` as a
+parameter to hashing.

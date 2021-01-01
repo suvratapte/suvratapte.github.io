@@ -415,7 +415,7 @@ With `node-3` removed:
 
 {% endhighlight %}
 
-Only 1 out of 8 keys got relocated. We can see that `node-3` keys are now with
+Only 2 out of 8 keys got relocated. We can see that `node-3` keys are now with
 `node-2`. Keys with `node-0` and `node-1` have not changed at all.
 
 ## Caveats

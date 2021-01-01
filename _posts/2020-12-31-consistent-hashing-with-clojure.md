@@ -36,15 +36,16 @@ For example, if the hash of the cache key came out to be 86696499 and if we have
 4 servers, then `(86696499 mod 4) = 3`; so the data should be in the node with
 index 3 (0 based indexes).
 
-This is very simple to implement. For simplicity, we will use names of users as
-cache keys.
+This is very simple to implement. For simplicity, we will use email addresses of
+users as cache keys.
 
 {% highlight clojure %}
 
 (require '[clojure.pprint :as pp])
 
-(def names ["Alice" "Bob" "Carry" "Daisy" "George" "Heidi"
-            "Kate" "Mark" "Steve" "Tony" "Wendy" "Zack"])
+(def emails ["Bob@example.com" "Carry@example.com" "Daisy@example.com"
+             "George@example.com" "Heidi@example.com" "Mark@example.com"
+             "Steve@example.com" "Zack@example.com"])
 
 (defn- get-node
   "Returns which node shall be used for the given `object` when `n`
@@ -65,30 +66,32 @@ cache keys.
           objects))
 
 ;; For printing maps in sorted order of keys
-(->> names (get-distribution 4) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution 4) (into (sorted-map)) pp/pprint)
 
 {% endhighlight %}
 
 Let's go through the code above.
 
-`names` is just a collection of names.
+`emails` is just a collection of emails.
 
 `get-node` tells us which object should go on which node. This was the logic
 that we discussed previously. We are first taking a hash and then taking `mod n`
 of that hash.
 
-`get-distribution` just runs `get-node` on `names` and returns a map which has
+`get-distribution` just runs `get-node` on `emails` and returns a map which has
 node names as keys and corresponding values as list of keys which would reside
 on those nodes.
 
-The last line prints how `names` will be divided on cache nodes if we had 4
+The last line prints how `emails` will be divided on cache nodes if we had 4
 cache nodes. It prints the following map:
 
 {% highlight clojure %}
-{"node-0" ["Steve" "Zack"],
- "node-1" ["Alice" "George"],
- "node-2" ["Bob"],
- "node-3" ["Carry" "Daisy" "Heidi" "Kate" "Mark" "Tony" "Wendy"]}
+
+{"node-0" ["Bob@example.com" "Steve@example.com" "Zack@example.com"],
+ "node-1" ["Carry@example.com" "Daisy@example.com" "George@example.com"],
+ "node-2" ["Mark@example.com"],
+ "node-3" ["Heidi@example.com"]}
+
 {% endhighlight %}
 
 Okay so this seems to be working well!  Now every time we have to fetch some
@@ -106,37 +109,43 @@ We can simulate the above 2 situations.
 Let's say we add another cache node in our cluster. We can simulate this by running:
 
 {% highlight clojure %}
-(->> names (get-distribution 5) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution 5) (into (sorted-map)) pp/pprint)
 {% endhighlight %}
 
 We will get the following:
 
 {% highlight clojure %}
-{"node-0" ["George" "Mark"],
- "node-1" ["Kate"],
- "node-2" ["Carry" "Heidi" "Steve" "Zack"],
- "node-3" ["Bob"],
- "node-4" ["Alice" "Daisy" "Tony" "Wendy"]}
+
+{"node-0" ["Bob@example.com"],
+ "node-1" ["Daisy@example.com"],
+ "node-2" ["Steve@example.com"],
+ "node-3" ["Carry@example.com" "George@example.com" "Mark@example.com"],
+ "node-4" ["Heidi@example.com" "Zack@example.com"]}
+
 {% endhighlight %}
 
 If we compare the distribution of keys for 4 nodes vs 5 nodes, we can see that
-literally *all* the keys have different nodes now.
+literally 6 out of 8 keys have different nodes now.
 
 The same will happen if a node goes down. Let's simulate this by running:
 
 {% highlight clojure %}
-(->> names (get-distribution 3) (into (sorted-map)) pp/pprint)
+
+(->> emails (get-distribution 3) (into (sorted-map)) pp/pprint)
+
 {% endhighlight %}
 
 This produces:
 
 {% highlight clojure %}
-{"node-0" ["Heidi" "Mark"],
- "node-1" ["Carry" "Daisy" "George" "Steve" "Tony" "Wendy"],
- "node-2" ["Alice" "Bob" "Kate" "Zack"]}
+
+{"node-0" ["Zack@example.com"],
+ "node-1" ["Bob@example.com" "Daisy@example.com" "George@example.com"],
+ "node-2" ["Carry@example.com" "Heidi@example.com" "Mark@example.com" "Steve@example.com"]}
+
 {% endhighlight %}
 
-In this case as well, 10 out of 12 keys now have a different node.
+In this case as well, 5 out of 8 keys now have a different node.
 
 Both of these cases create a really bad situation for our databases. Our data is
 going to be residing on 4 nodes initially. Once we add or remove nodes, almost
@@ -344,8 +353,9 @@ Let's use it for the same example scenarios that we used for mod n hashing.
 
 (require '[clojure.pprint :as pp])
 
-(def names ["Alice" "Bob" "Carry" "Daisy" "George" "Heidi"
-            "Kate" "Mark" "Steve" "Tony" "Wendy" "Zack"])
+(def emails ["Bob@example.com" "Carry@example.com" "Daisy@example.com"
+             "George@example.com" "Heidi@example.com" "Mark@example.com"
+             "Steve@example.com" "Zack@example.com"])
 
 (def nodes ["node-0" "node-1" "node-2" "node-3"])
 
@@ -362,7 +372,7 @@ Let's use it for the same example scenarios that we used for mod n hashing.
             objects)))
 
 ;; For printing maps in sorted order of keys
-(->> names (get-distribution nodes) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution nodes) (into (sorted-map)) pp/pprint)
 
 {% endhighlight %}
 
@@ -370,10 +380,10 @@ Result with 4 nodes:
 
 {% highlight clojure %}
 
-{"node-0" ["Carry" "Heidi" "Zack"],
- "node-1" ["Alice" "Wendy"],
- "node-2" ["Daisy"],
- "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+{"node-0" ["Daisy@example.com" "George@example.com"],
+ "node-1" ["Mark@example.com" "Zack@example.com"],
+ "node-2" ["Bob@example.com" "Heidi@example.com"],
+ "node-3" ["Carry@example.com" "Steve@example.com"]}
 
 {% endhighlight %}
 
@@ -381,32 +391,32 @@ With a node added:
 
 {% highlight clojure %}
 
-(->> names (get-distribution (nodes "node-4")) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution (nodes "node-4")) (into (sorted-map)) pp/pprint)
 
-{"node-0" ["Carry" "Heidi" "Zack"],
- "node-1" ["Alice" "Wendy"],
- "node-2" ["Daisy"],
- "node-3" ["Bob" "George" "Kate" "Mark" "Steve" "Tony"]}
+{"node-0" ["Daisy@example.com" "George@example.com"],
+ "node-1" ["Mark@example.com" "Zack@example.com"],
+ "node-2" ["Heidi@example.com"],
+ "node-3" ["Carry@example.com" "Steve@example.com"],
+ "node-4" ["Bob@example.com"]}
 
 {% endhighlight %}
 
-It is interesting to see that nothing has changed here! This is the best
-case. It will happen rarely in production.
+Only 1 out of 8 keys got relocated!
 
 With `node-3` removed:
 
 {% highlight clojure %}
 
-(->> names (get-distribution (drop-last nodes)) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution (drop-last nodes)) (into (sorted-map)) pp/pprint)
 
-{"node-0" ["Carry" "Heidi" "Zack"],
- "node-1" ["Alice" "Wendy"],
- "node-2" ["Bob" "Daisy" "George" "Kate" "Mark" "Steve" "Tony"]}
+{"node-0" ["Daisy@example.com" "George@example.com"],
+ "node-1" ["Mark@example.com" "Zack@example.com"],
+ "node-2" ["Bob@example.com" "Carry@example.com" "Heidi@example.com" "Steve@example.com"]}
 
 {% endhighlight %}
 
-We can see that `node-3` keys are now with `node-2`. Keys with `node-0` and
-`node-1` have not changed at all.
+Only 1 out of 8 keys got relocated. We can see that `node-3` keys are now with
+`node-2`. Keys with `node-0` and `node-1` have not changed at all.
 
 ## Caveats
 

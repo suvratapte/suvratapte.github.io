@@ -7,8 +7,9 @@ categories: consistent-hashing, distributed-caches, clojure
 comments: true
 ---
 
-In this post, I have tried explaining what *Consistent Hashing* is and why it is
-needed and its implementation in Clojure.
+In this post, I have tried explaining what *Consistent Hashing* is, why it is
+needed and its implementation in Clojure. Consistent hashing has many use
+cases. I have chosen its use case for distributed caching.
 
 ## Caching
 
@@ -343,7 +344,8 @@ nodes which have hashes lesser than the hash of the cache-key. We will stop
 dropping once we find a value greater than `key-hash`. This value will be the
 hash of the closest node in clockwise direction. If `key-hash` is greater then
 all the values in `node-hashes`, we wrap around and select `(first
-node-hashes)`.
+node-hashes)`. For simplicity, I have used sequential search for finding the
+closest hash. Binary search could be used for making this more effecient.
 
 Now our API for consistent hashing is complete and ready for use!
 

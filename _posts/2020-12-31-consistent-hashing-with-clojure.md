@@ -7,9 +7,9 @@ categories: consistent-hashing, distributed-caches, clojure
 comments: true
 ---
 
-In this post, I have tried explaining what *Consistent Hashing* is, why it is
-needed and its implementation in Clojure. Consistent hashing has many use
-cases. I have chosen its use case for distributed caching.
+In this post, I have tried explaining what *Consistent Hashing* is, when it is
+needed and how to implement it in Clojure. Consistent hashing has many use
+cases. I have chosen the usecase of distributed caching for this post.
 
 ## Caching
 

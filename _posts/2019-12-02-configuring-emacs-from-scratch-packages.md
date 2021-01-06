@@ -24,7 +24,7 @@ First, we will tell `package` to include Melpa in its list of package archives. 
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 {% endhighlight %}
 
 <!---excerpt-break-->
@@ -124,7 +124,7 @@ As usual, do not forget to write good comments. Your `init.el` should look somet
 
 ;; Add `melpa` to `package-archives`.
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Use the `spacemacs-dark` theme.
 (load-theme 'spacemacs-dark)
@@ -241,7 +241,7 @@ As usual, do not forget to write good comments. Your `init.el` will look somethi
 
 ;; Add `melpa` to `package-archives`.
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Do not use a different background color for comments.
 (setq spacemacs-theme-comment-bg nil)

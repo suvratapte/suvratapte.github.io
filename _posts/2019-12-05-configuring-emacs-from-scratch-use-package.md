@@ -47,7 +47,7 @@ After the first two parts, our ``init.el`` looks like this:
 
 ;; Add `melpa` to `package-archives`.
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Do not use a different background color for comments.
 (setq spacemacs-theme-comment-bg nil)
@@ -231,7 +231,7 @@ Now our `init.el` will look something like this:
 
 ;; Add `melpa` to `package-archives`.
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 (when (not (package-installed-p 'use-package))
   (package-refresh-contents)

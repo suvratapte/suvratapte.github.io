@@ -48,7 +48,7 @@ google_analytics: UA-174035059-1
 # Header pages
 header_pages:
   - archive.html
-  - about.markdown
+  - about.md
 
 # Use only the title in the links (default is date directories + title + ext)
 permalink: /:title/

@@ -13,12 +13,14 @@ cases. I have chosen the use case of distributed caching for this post.
 
 ## Caching
 
-Almost all applications today use some kind of caching. Caches are required to
-save your databases from having to serve huge amount of requests. Initially,
-your application would have one cache node sitting over your database. On read
-paths, it will be checked if data is available on the cache node, if not, you
-would go to the database and populate the data on your cache node. On write
-paths, you would first update the database and then your cache.
+Almost all applications today use some kind of caching. Caches help reduce the number of
+requests served by your database and improve latency. Initially, your application would
+have one cache node sitting over your database. On read paths, it will be checked if data
+is available on the cache node, if not, you would go to the database and populate the data
+on your cache node. On write paths, you would first update the database and then your
+cache. Or let the cached item expire with some TTL according to your consistency
+requirements. With this setup, you are using your cache node as a superfast index to look
+up hot items and absorb traffic that would have otherwise gone to your database.
 
 But as your application usage grows, your cache node is also going to get
 overwhelmed and soon enough, you will need multiple cache nodes. When you have
@@ -48,7 +50,7 @@ users as cache keys.
              "George@example.com" "Heidi@example.com" "Mark@example.com"
              "Steve@example.com" "Zack@example.com"])
 
-(defn- get-node
+(defn get-node
   "Returns which node shall be used for the given `object` when `n`
   cache nodes are there."
   [n object]
@@ -148,11 +150,10 @@ This produces:
 
 In this case as well, 5 out of 8 keys now have a different node.
 
-Both of these cases create a really bad situation for our databases. Our data is
-going to be residing on 4 nodes initially. Once we add or remove nodes, almost
-all of the keys are going to get relocated. This is going to result into a
-flurry of cache misses and all the missed requests will go to our databases,
-creating a hotspot.
+Both of these cases create a really bad situation for our databases. Our data is going to
+be residing on 4 nodes initially. Once we add or remove nodes, almost all of the keys are
+going to get relocated. This is going to result in a flurry of cache misses and all the
+missed requests will go to our databases, creating a hotspot.
 
 This is clearly undesirable and in extreme situations, this could even take our
 entire system down.
@@ -272,43 +273,43 @@ Let's see how `add-node` and `remove-node` work.
 {% highlight clojure %}
 
 (defn add-node
-  "Adds `node` to existing `ring-state`.
+  "Adds `node` to existing `ring`.
 
-  `ring-state` is expected to be a ring data structure (see doc string of
+  `ring` is expected to be a ring data structure (see doc string of
   `create-ring`.)
 
   `node` is expected to be a node descriptor (see doc string of `create-ring`).
 
   Returns a ring data structure (see doc string of `create-ring`).
   "
-  [ring-state node]
-  (let [current-nodes (-> ring-state :hash->node vals)]
+  [ring node]
+  (let [current-nodes (-> ring :hash->node vals)]
     (-> current-nodes
         (conj node)
         create-ring)))
 
 (defn remove-node
-  "Removes `node` from existing `ring-state`.
+  "Removes `node` from existing `ring`.
 
-  `ring-state` is expected to be a ring data structure (see doc string of
+  `ring` is expected to be a ring data structure (see doc string of
   `create-ring`.)
 
   `node` is expected to be a node descriptor (see doc string of `create-ring`).
 
   Returns a ring data structure (see doc string of `create-ring`).
   "
-  [ring-state node]
-  (let [current-nodes (-> ring-state :hash->node vals)]
+  [ring node]
+  (let [current-nodes (-> ring :hash->node vals)]
     (->> current-nodes
          (remove #(= % node))
          create-ring)))
 
 {% endhighlight %}
 
-As you can see, these are very simple functions which just get `current-nodes`
-from `ring-state` and then add or remove a node and call `create-ring`
-again. This works because our hash function is repeatable. So creating the ring
-again generates the same hash values for existing nodes.
+As you can see, these are very simple functions which just get `current-nodes` from the
+`ring` and then add or remove a node and call `create-ring` again. This works
+because our hash function is repeatable. So creating the ring again generates the same
+hash values for existing nodes.
 
 Let's look at the last function in our API, `get-node`.
 
@@ -316,14 +317,14 @@ Let's look at the last function in our API, `get-node`.
 
 (defn get-node
   "Returns node to be used for cache-key `k`."
-  [ring-state k]
-  (let [node-hashes (:node-hashes ring-state)
+  [ring k]
+  (let [node-hashes (:node-hashes ring)
         key-hash (hash k)
         closest-hash (or (->> node-hashes
                               (drop-while #(< % key-hash))
                               first)
                          (first node-hashes))]
-    (get (:hash->node ring-state) closest-hash)))
+    (get (:hash->node ring) closest-hash)))
 
 {% endhighlight %}
 
@@ -363,9 +364,9 @@ Let's use it for the same example scenarios that we used for mod n hashing.
 
 (defn get-distribution
   [nodes objects]
-  (let [ring-state (create-ring nodes)]
+  (let [ring (create-ring nodes)]
     (reduce (fn [acc object]
-              (let [node (get-node ring-state object)]
+              (let [node (get-node ring object)]
                 (update acc
                         node
                         (fnil conj [])

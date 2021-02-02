@@ -394,7 +394,7 @@ With a node added:
 
 {% highlight clojure %}
 
-(->> emails (get-distribution (nodes "node-4")) (into (sorted-map)) pp/pprint)
+(->> emails (get-distribution (conj nodes "node-4")) (into (sorted-map)) pp/pprint)
 
 {"node-0" ["Daisy@example.com" "George@example.com"],
  "node-1" ["Mark@example.com" "Zack@example.com"],

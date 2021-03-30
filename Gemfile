@@ -28,3 +28,7 @@ end
 
 # Performance-booster for watching directories on Windows
 gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
+
+# Fix for vulnerability found by GitHub:
+# kramdown version needs to be 2.3.1 or later.
+gem "kramdown", ">= 2.3.1"

@@ -18,6 +18,8 @@ Here's the video of the performance:
 <br/>
 <!---excerpt-break-->
 
+This concert was organized by <a href="https://www.facebook.com/watch/dhaibatmusic/" target="_blank">Dhaibat music</a>.
+
 Hope you enjoy the performance! :)
 
 You can read more about KG on his <a href="http://www.kgwestman.com/" target="_blank">website</a>.

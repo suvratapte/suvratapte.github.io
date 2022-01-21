@@ -5,11 +5,13 @@ permalink: /about/
 ---
 
 Thanks for visiting my website! 😄
-<br>I am Suvrat. I am a software engineer at <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>. 💻
+<br>I am Suvrat.
+<br>I am a software engineer at <a href="https://www.klarna.com/" target="_blank">Klarna</a> in Stockholm.
+<br>Previously, I have worked at <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>.
 
-I write distributed systems in Clojure. I like to dive deep into whatever I learn. I have spoken at Functional Conf 2019 about <a href="https://speakerdeck.com/suvratapte/debuggers-in-lispy-languages" target="_blank">Debuggers in Lisps</a>. <a href="https://clojure.org/" target="_blank"><img href="https://clojure.org/" src="/resources/about-clojure-icon.png" style="height: 2.5%; width: 2.5%;"/></a>
+I write distributed systems in Clojure (and I'm learning Haskell). I like to dive deep into whatever I learn. I have spoken at Functional Conf 2019 about <a href="https://speakerdeck.com/suvratapte/debuggers-in-lispy-languages" target="_blank">Debuggers in Lisps</a>. <a href="https://clojure.org/" target="_blank"><img href="https://clojure.org/" src="/resources/about-clojure-icon.png" style="height: 2.5%; width: 2.5%;"/></a>
 
-Before moving to backend programming, I was an iOS developer for 2 years at Helpshift itself where I wrote Objective-C and Swift. I have spoken about <a href="https://speakerdeck.com/suvratapte/objective-c-internals" target="_blank">Objective-C Internals</a>. <img src="/resources/about-apple-icon.png" style="height: 1.8%; width: 1.8%; margin-bottom: 0.4%"/>
+Before moving to backend programming, I was an iOS developer for 2 years at Helpshift where I wrote Objective-C and Swift. I have spoken about <a href="https://speakerdeck.com/suvratapte/objective-c-internals" target="_blank">Objective-C Internals</a>. <img src="/resources/about-apple-icon.png" style="height: 1.8%; width: 1.8%; margin-bottom: 0.4%"/>
 
 I'm an Emacs devotee and I like to <a href="https://medium.com/@suvratapte/configuring-emacs-from-scratch-intro-3157bed9d040" target="_blank">write</a> and <a href="https://youtu.be/tFt6plDQm58" target="_blank">talk</a> about Emacs. My Emacs config sits <a href="https://github.com/suvratapte/dot-emacs-dot-d" target="_blank">here</a>. <a href="https://www.gnu.org/software/emacs/" target="_blank"><img src="/resources/about-emacs-icon.png" style="height: 2.5%; width: 2.5%;"/></a>
 

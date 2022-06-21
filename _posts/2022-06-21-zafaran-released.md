@@ -8,7 +8,7 @@ comments: true
 no_excerpt: true
 ---
 
-We recently recorded a music album which is a mix of India, Swedish and Egyptian music. The songs are composed by KG Westman. I got to collaborate with two incredible musicians from Egypt - Adham Al Sayyad and Ahmed Radwan. Here's the album:
+We recently recorded a music album which is a mix of Indian, Swedish and Egyptian music. The songs are composed by KG Westman. I got to collaborate with two incredible musicians from Egypt - Adham Al Sayyad and Ahmed Radwan. Here's the album:
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/5lNYtd8IocZE2AbRsmM0s6?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
 

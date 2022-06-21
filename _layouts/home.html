@@ -23,7 +23,9 @@ layout: default
         </h3>
         {%- if site.show_excerpts -%}
           {{ post.excerpt }}
-          <a href="{{ post.url | relative_url }}">Read More</a>
+          {%- if post.no_excerpt != true -%}
+            <a href="{{ post.url | relative_url }}">Read More</a>
+          {%- endif -%}
           <br/><br/>
           <hr style="border-bottom: 0px"/>
         {%- endif -%}

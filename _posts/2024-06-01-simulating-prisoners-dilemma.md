@@ -11,10 +11,11 @@ A recent [Veritasium video](https://www.youtube.com/watch?v=mScpHTIi-kM) got me
 interested in Game Theory and I decided to try to implement some of the
 experiments in game theory.
 
-The word "game" in game theory makes it seem that it is related to casual
-computer or board games. A game has some rules and usually a scoring system.  In
-game theory, we try to create models which replicate real life situations in
-terms of rules and some scoring system.
+The word "game" in game theory makes it seem that it is related to (possibly
+silly) computer or board games. But that is not true. In game theory, we create
+models which attempt to replicate real life situations in terms of rules and
+some scoring system to measure the outcomes. A game has rules and also a scoring
+system. That's why the name.
 
 Prisoner's Dilemma is one of the famous games in game theory. You can read about
 it [here](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma).

@@ -6,8 +6,8 @@ permalink: /about/
 
 Thanks for visiting my website! 😄
 <br>I am Suvrat.
-<br>I am a software engineer at <a href="https://www.klarna.com/" target="_blank">Klarna</a> in Stockholm.
-<br>Previously, I have worked at <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>.
+<br>I am a software engineer at <a href="https://www.vara.ai/" target="_blank">Vara</a> in Stockholm.
+<br>Previously, I have worked at <a href="https://www.klarna.com/" target="_blank">Klarna</a> and <a href="https://www.helpshift.com/" target="_blank">Helpshift Inc</a>.
 
 I write distributed systems in Clojure (and I'm learning Haskell). I like to dive deep into whatever I learn. I have spoken at Functional Conf 2019 about <a href="https://speakerdeck.com/suvratapte/debuggers-in-lispy-languages" target="_blank">Debuggers in Lisps</a>. <a href="https://clojure.org/" target="_blank"><img href="https://clojure.org/" src="/resources/about-clojure-icon.png" style="height: 2.5%; width: 2.5%;"/></a>
 

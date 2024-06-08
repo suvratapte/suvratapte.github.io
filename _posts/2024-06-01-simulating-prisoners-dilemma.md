@@ -37,6 +37,8 @@ point each.
 My plan is to implement a two player version first and then implement a
 multi-player version (which will be a new post).
 
+<!---excerpt-break-->
+
 ## Implementation
 
 This game will be played between two players and they will play many rounds. So

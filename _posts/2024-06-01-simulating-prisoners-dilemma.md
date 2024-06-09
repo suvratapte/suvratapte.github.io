@@ -28,12 +28,12 @@ both cooperate, they get 3 points each. If one cooperates and the other defects,
 they defector gets 5 points and the other gets 0. If both defect, both get 1
 point each.
 
-|-----------------------|---------------------|------------------|
-|                       | Player 1 cooperates | Player 1 defects |
-|-----------------------|---------------------|------------------|
-| *Player 2 cooperates* | P1 - 3, P2 - 3      | P1 - 5, P2 - 0   |
-| *Player 2 deffects*   | P1 - 0, P2 - 5      | P1 - 1, P2 - 1   |
-|-----------------------|---------------------|------------------|
+|-------------------------|---------------------|------------------|
+|                         | Player 1 cooperates | Player 1 defects |
+|-------------------------|---------------------|------------------|
+| **Player 2 cooperates** | P1 - 3, P2 - 3      | P1 - 5, P2 - 0   |
+| **Player 2 deffects**   | P1 - 0, P2 - 5      | P1 - 1, P2 - 1   |
+|-------------------------|---------------------|------------------|
 
 My plan is to implement a two player version first and then implement a
 multi-player version (which will be a new post).

@@ -146,7 +146,20 @@ state of the game and keep track of the total score. Let's do that:
 
 {% endhighlight %}
 
-This is the complete implementation of the two player version of this game.
+This is the complete implementation of the two player version of this
+game. Now we can simulate this game between two strategies:
+
+{% highlight clojure %}
+
+(:score (simulate-game 100 devil tit-for-tat))
+
+{% endhighlight %}
+
+I have some more strategies
+[here](https://github.com/suvratapte/game-theory/blob/main/src/game_theory/single_player.clj).
+
+Play around and find out which is the best strategy! :-)
+
 I have also written a multi player version [here](https://github.com/suvratapte/game-theory/blob/main/src/game_theory/multi_player.clj).
 I will soon write a post about it.
 

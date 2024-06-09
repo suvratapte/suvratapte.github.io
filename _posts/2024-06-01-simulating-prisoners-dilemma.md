@@ -7,26 +7,27 @@ categories: clojure, game-theory
 comments: true
 ---
 
-A recent [Veritasium video](https://www.youtube.com/watch?v=mScpHTIi-kM) got me
-interested in Game Theory and I decided to try to implement some of the
-experiments in game theory.
+A recent [Veritasium
+video](https://www.youtube.com/watch?v=mScpHTIi-kM) sparked my
+interest in Game Theory, and I decided to try implementing some of its
+experiments.
 
-The word "game" in game theory makes it seem that it is related to (possibly
-silly) computer or board games. But that is not true. In game theory, we create
-models which attempt to replicate real life situations in terms of rules and
-some scoring system to measure the outcomes. A game has rules and also a scoring
-system. That's why the name.
+The word "game" in game theory makes it seem that it is related to
+(possibly silly) computer or board games. But that is not true. In
+game theory, we create models which attempt to replicate real life
+situations in terms of rules and some scoring system to measure the
+outcomes. A "game" also has rules and a scoring system, hence the name.
 
 Prisoner's Dilemma is one of the famous games in game theory. You can read about
 it [here](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma).
 
-We are going to implement the inverted version of this game. The rules of our
-game are as follows:
+We are going to implement an inverted version of this game. The rules
+of our game are as follows:
 
-There are two players, they can either cooperate with each other or defect.  If
-both cooperate, they get 3 points each. If one cooperates and the other defects,
-they defector gets 5 points and the other gets 0. If both defect, both get 1
-point each.
+There are two players who can either cooperate with each other or
+defect. If both cooperate, they each get 3 points. If one cooperates
+and the other defects, the defector gets 5 points while the cooperator
+gets 0. If both defect, they each get 1 point.
 
 |-------------------------|-------------------------|-------------------------|
 |                         | Player 1 cooperates     | Player 1 defects        |
@@ -42,9 +43,10 @@ multi-player version (which will be a new post).
 
 ## Implementation
 
-This game will be played between two players and they will play many rounds. So
-we will need to store the moves that each player has played in all the rounds
-and the scores of the players. So let's define the `state` of the game:
+This game will be played between two players over many
+rounds. Therefore, we need to store the moves that each player makes
+in all the rounds, as well as their scores. Let's define the state of
+the game:
 
 {% highlight clojure %}
 
@@ -56,13 +58,14 @@ and the scores of the players. So let's define the `state` of the game:
 
 {% endhighlight %}
 
-Now let's see how the players can make a move. For this, we need to a function
-for each player which will return whether the player wants to cooperate or
-defect. Let's represent cooperation with `:co` and defection with `:de`.
+Now let's see how the players can make a move. For this, we need a
+function for each player which will return whether the player wants to
+cooperate or defect in the current round. Let's represent cooperation
+with `:co` and defection with `:de`.
 
 For the players to decide their next moves, we need to provide them with the
 history of their previous moves. So that they can devise a strategy which takes
-into account the previous moves.
+into account the previous moves made by them and their opponent.
 
 {% highlight clojure %}
 
@@ -76,12 +79,14 @@ into account the previous moves.
 
 {% endhighlight %}
 
-The `tit-for-tat` strategy just does what the other player has done in the last
-round. And if it is the first round, it cooperates.
-The `devil` strategy just defects all the time.
+The `tit-for-tat` strategy replicates the other player's previous
+move. If it is the first round, it cooperates. The `devil` strategy
+always defects.
 
-Now that we know how to write strategy functions which give us moves, let's
-compute the score based on the moves.
+Now that we know how to write strategy functions to determine moves,
+let's compute the scores based on the moves made by both the players.
+Here, we will implement the scoring system as described by the table
+above.
 
 {% highlight clojure %}
 
@@ -111,11 +116,12 @@ compute the score based on the moves.
 
 {% endhighlight %}
 
-`compute-score` as the name suggests, computes the score given the moves of the
-first and the second player.
+The `compute-score` function, as the name suggests, calculates the
+score based on the moves of the first and second players.
 
-Now to play this game over and over again for many rounds, we have to update the
-state of the game and keep track of the total score. Let's do that:
+Now to play this game over and over again for many rounds, we have to
+update the state of the game after each round to keep the track of the
+moves history and the total score. Let's do that:
 
 {% highlight clojure %}
 
@@ -125,10 +131,12 @@ state of the game and keep track of the total score. Let's do that:
          n rounds-number]
     (let [first-player-moves (:first-player-moves state)
           second-player-moves (:second-player-moves state)
+
           first-player-move (first-player-stragey first-player-moves
                                                   second-player-moves)
           second-player-move (second-player-stragey second-player-moves
                                                     first-player-moves)
+
           [first-player-score second-player-score]
           (compute-score first-player-move
                          second-player-move)
@@ -146,16 +154,22 @@ state of the game and keep track of the total score. Let's do that:
 
 {% endhighlight %}
 
-This is the complete implementation of the two player version of this
-game. Now we can simulate this game between two strategies:
+This is the complete implementation of the two-player version of this
+game. Now we can simulate the game between two strategies:
 
 {% highlight clojure %}
 
-(:score (simulate-game 100 devil tit-for-tat))
+(simulate-game 100 devil tit-for-tat)
+
+;; Or if you just want to see the score
+
+(-> 2000
+    (simulate-game tit-for-tat devil)
+    :score)
 
 {% endhighlight %}
 
-I have some more strategies
+I have written some more strategies
 [here](https://github.com/suvratapte/game-theory/blob/main/src/game_theory/single_player.clj).
 
 Play around and find out which is the best strategy! :-)
@@ -163,4 +177,7 @@ Play around and find out which is the best strategy! :-)
 I have also written a multi player version [here](https://github.com/suvratapte/game-theory/blob/main/src/game_theory/multi_player.clj).
 I will soon write a post about it.
 
-:-)
+Feel free to make a PR if you think anything in the code needs to be
+improved.
+
+Happy learning! :-)

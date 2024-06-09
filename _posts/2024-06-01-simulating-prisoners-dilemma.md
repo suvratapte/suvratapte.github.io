@@ -12,6 +12,14 @@ video](https://www.youtube.com/watch?v=mScpHTIi-kM) sparked my
 interest in Game Theory, and I decided to try implementing some of its
 experiments.
 
+When I was talking about this with a friend of mine, she incessantly
+pushed me to write an article about it in Marathi in a magazine. This
+is a post accompanying the article. I will only discuss the
+implementation in this post. I would highly recommend watching the
+[Veritasium
+video](https://www.youtube.com/watch?v=mScpHTIi-kM). [Derek](https://en.wikipedia.org/wiki/Derek_Muller)
+has done a phinomenal job in this one.
+
 The word "game" in game theory makes it seem that it is related to
 (possibly silly) computer or board games. But that is not true. In
 game theory, we create models which attempt to replicate real life
@@ -29,12 +37,12 @@ defect. If both cooperate, they each get 3 points. If one cooperates
 and the other defects, the defector gets 5 points while the cooperator
 gets 0. If both defect, they each get 1 point.
 
-|-------------------------|---------------------------------------------------|---------------------------------------------------|
-|                         | Player 1 cooperates                               | Player 1 defects                                  |
-|-------------------------|---------------------------------------------------|---------------------------------------------------|
-| **Player 2 cooperates** | P1 - **3** &nbsp; &nbsp; &nbsp; &nbsp; P2 - **3** | P1 - **5** &nbsp; &nbsp; &nbsp; &nbsp; P2 - **0** |
-| **Player 2 deffects**   | P1 - **0** &nbsp; &nbsp; &nbsp; &nbsp; P2 - **5** | P1 - **1** &nbsp; &nbsp; &nbsp; &nbsp; P2 - **1** |
-|-------------------------|---------------------------------------------------|---------------------------------------------------|
+|-------------------------|----------------------------|----------------------------|
+|                         | Player 1 cooperates        | Player 1 defects           |
+|-------------------------|----------------------------|----------------------------|
+| **Player 2 cooperates** | P1 - **3** <br> P2 - **3** | P1 - **5** <br> P2 - **0** |
+| **Player 2 deffects**   | P1 - **0** <br> P2 - **5** | P1 - **1** <br> P2 - **1** |
+|-------------------------|----------------------------|----------------------------|
 
 My plan is to implement a two player version first and then implement a
 multi-player version (which will be a new post).

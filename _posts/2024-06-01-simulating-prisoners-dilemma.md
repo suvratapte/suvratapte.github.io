@@ -18,7 +18,7 @@ is a post accompanying the article. I will only discuss the
 implementation in this post. I would highly recommend watching the
 [Veritasium video](https://www.youtube.com/watch?v=mScpHTIi-kM) before
 reading further. [Derek](https://en.wikipedia.org/wiki/Derek_Muller)
-has done a phinomenal job in this one.
+has done a phenomenal job in this one.
 
 The word "game" in game theory makes it seem that it is related to
 (possibly silly) computer or board games. But that is not true. In

@@ -113,7 +113,7 @@ above.
            (= :de second-player-move))
       [1 1]
 
-      ;; One cooperatiion one defection
+      ;; One cooperates, other defects
       (and (= :co first-player-move)
            (= :de second-player-move))
       [0 5]

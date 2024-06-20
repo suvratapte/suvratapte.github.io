@@ -9,8 +9,8 @@ comments: true
 
 A recent [Veritasium
 video](https://www.youtube.com/watch?v=mScpHTIi-kM) sparked my
-interest in Game Theory, and I decided to try implementing some of its
-experiments.
+interest in Game Theory, and I decided to try to implement some of
+experiments in it.
 
 When I was talking about this with a friend of mine, she incessantly
 pushed me to write an article about it in Marathi in a magazine. This

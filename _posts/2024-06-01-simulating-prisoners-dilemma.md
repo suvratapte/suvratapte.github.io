@@ -13,8 +13,8 @@ interest in Game Theory, and I decided to try to implement some of the
 experiments in it.
 
 When I was talking about this with a friend of mine, she incessantly
-pushed me to write an [article about it in Marathi in a
-magazine](/resources/ganit-sahakaryache.pdf). This is a post
+pushed me to write an <a href="/resources/ganit-sahakaryache.pdf">
+article about it in Marathi in a magazine</a>. This is a post
 accompanying the article. I will only discuss the implementation in
 this post. I would highly recommend watching the [Veritasium
 video](https://www.youtube.com/watch?v=mScpHTIi-kM) before reading

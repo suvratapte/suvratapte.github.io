@@ -12,7 +12,7 @@ I recently recorded a new album with my dear friend Stian Grimstad.
 
 We have recorded 3 short and sweet tracks in the rare Raga Hemavati - Alaap, Vilmabit Teentaal and Drut Teentaal.
 
-<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/4uA2lJXx5wGPTC5HZ6O08H?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/57TRyUfJ6y5gawESzWgjxF?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
 <br/>
 

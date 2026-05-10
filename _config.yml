@@ -33,6 +33,11 @@ twitter_username: suvratapte
 github_username: suvratapte
 youtube_username: suvratapte1
 linkedin_username: suvrat-apte-27799592
+instagram_username: suvratapte
+# Facebook profile uses profile.php?id=... so we use a raw URL instead of a
+# username (the minima default username pattern cgi_escapes "?" and "=" and
+# breaks the link). _includes/social.html is overridden to read this.
+facebook_url: https://www.facebook.com/profile.php?id=100073169330385
 rss: RSS
 
 # Home page should show excerpts
@@ -48,6 +53,7 @@ google_analytics: UA-174035059-1
 # Header pages
 header_pages:
   - archive.html
+  - teaching.md
   - about.md
 
 # Use only the title in the links (default is date directories + title + ext)
